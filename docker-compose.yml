@@ -1,0 +1,57 @@
+version: '2.2'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    volumes: # Persist ES data in seperate "esdata" volume
+      - ./esdata:/usr/share/elasticsearch/data
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - cluster.name=contextElasticSearch
+    ports: # Expose Elasticsearch ports
+      - "9309:9300"
+      - "9209:9200"
+
+  unomi:
+    image: apache/unomi:2.2.0-SNAPSHOT
+    #    build: .
+#    container_name: unomi
+    environment:
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT=9300
+      - UNOMI_ELASTICSEARCH_ADDRESSES=elasticsearch:9200
+      - UNOMI_THIRDPARTY_PROVIDER1_IPADDRESSES=0.0.0.0/0,::1,127.0.0.1
+    ports:
+      - 8182:8181
+      - 9444:9443
+      - 8103:8102
+    links:
+      - elasticsearch
+    depends_on:
+      - elasticsearch
+
+  unomi-studio:
+#    container_name: unomi-studio
+    image: grootan/unomi-studio:1.0.0
+    environment:
+      UNOMI_HOST: http://unomi:8181
+      UNOMI_USERNAME: karaf
+      UNOMI_PASSWORD: karaf
+      ELASTIC_HOST: http://elasticsearch:9300
+#    volumes:
+#      - ./sslcert:/sslcert
+    ports:
+      - 8086:8085
+      - 8446:8445
+    links:
+      - elasticsearch
+      - unomi
+    depends_on:
+      - unomi
+      - elasticsearch
+
+#volumes: # Define seperate volume for Elasticsearch data
+#  esdata1:
+#    driver: local
