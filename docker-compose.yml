@@ -3,7 +3,7 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
     volumes: # Persist ES data in seperate "esdata" volume
-      - ./esdata:/usr/share/elasticsearch/data
+      - ./esdata:/var/lib/elasticsearch/data
     environment:
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -24,9 +24,9 @@ services:
       - UNOMI_ELASTICSEARCH_ADDRESSES=elasticsearch:9200
       - UNOMI_THIRDPARTY_PROVIDER1_IPADDRESSES=0.0.0.0/0,::1,127.0.0.1
     ports:
-      - 8182:8181
-      - 9444:9443
-      - 8103:8102
+      - "8182:8181"
+      - "9444:9443"
+      - "8103:8102"
     links:
       - elasticsearch
     depends_on:
