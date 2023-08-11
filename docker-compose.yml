@@ -11,14 +11,14 @@ services:
       - xpack.security.enabled=false
       - cluster.name=contextElasticSearch
 #      - plugins.security.disabled=true
-      - http.port=9200
       - http.cors.enabled=true
-      - http.cors.allow-origin=http://localhost:1358,http://127.0.0.1:1358
+#      - http.cors.allow-origin=http://localhost:1358,http://127.0.0.1:1358
+      - http.cors.allow-origin= "http://dejavu:1358"
       - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
       - http.cors.allow-credentials=true
     ports: # Expose Elasticsearch ports
-      - "9309:9300"
-      - "9209:9200"
+      - "9300:9300"
+      - "9200:9200"
 
   unomi:
     image: apache/unomi:2.2.0-SNAPSHOT
