@@ -10,7 +10,7 @@ services:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - cluster.name=contextElasticSearch
-      - plugins.security.disabled=true
+#      - plugins.security.disabled=true
       - http.port=9200
       - http.cors.enabled=true
       - http.cors.allow-origin=http://localhost:1358,http://127.0.0.1:1358
